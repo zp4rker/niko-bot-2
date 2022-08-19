@@ -9,18 +9,25 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 object PrivateMessageReaction : ListenerAdapter() {
     override fun onMessageReactionAdd(event: MessageReactionAddEvent) {
         if (!event.isFromType(ChannelType.PRIVATE)) return
-        if (event.user!!.isBot) return
+        if (event.user == event.jda.selfUser) return
 
         if (event.emoji == Emoji.fromFormatted("✔️")) { // Confirm
-            val image = event.channel.retrieveMessageById(event.messageId).complete().attachments.first()
+            val imageMsg = event.channel.retrieveMessageById(event.messageId).complete()
+            val image = imageMsg.attachments.first()
 
             val msg = event.jda.getTextChannelById(VERIFICATION_CHANNEL)?.sendMessage(image.proxyUrl)?.complete()
-            msg?.let {
-                it.addReaction(Emoji.fromFormatted("✔️")).queue()
-                it.addReaction(Emoji.fromFormatted("❌")).queue()
+            msg?.apply {
+                addReaction(Emoji.fromFormatted("✔️")).queue()
+                addReaction(Emoji.fromFormatted("❌")).queue()
             }
+
+            imageMsg.apply {
+                removeReaction(Emoji.fromFormatted("✔️"), event.jda.selfUser).queue()
+                removeReaction(Emoji.fromFormatted("❌"), event.jda.selfUser).queue()
+            }
+            event.channel.sendMessage("Your image was sent to the verification channel.").queue()
         } else if (event.emoji == Emoji.fromFormatted("❌")) { // Cancel
-            event.channel.sendMessage("Your image was not sent to the verification channel.")
+            event.channel.sendMessage("Your image was not sent to the verification channel.").queue()
         }
     }
 }
