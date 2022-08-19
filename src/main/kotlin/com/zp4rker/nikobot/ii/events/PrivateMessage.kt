@@ -1,6 +1,5 @@
 package com.zp4rker.nikobot.ii.events
 
-import com.zp4rker.nikobot.ii.VERIFICATION_CHANNEL
 import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -15,12 +14,12 @@ object PrivateMessage : ListenerAdapter() {
         if (event.message.attachments.isEmpty()) return
         if (!event.message.attachments.first().isImage) return
 
-        val image = event.message.attachments.first()
-
-        val msg = event.jda.getTextChannelById(VERIFICATION_CHANNEL)?.sendMessage(image.proxyUrl)?.complete()
-        msg?.let {
+        // Add confirm/cancel reactions
+        event.message.let {
             it.addReaction(Emoji.fromFormatted("✔️")).queue()
             it.addReaction(Emoji.fromFormatted("❌")).queue()
         }
+
+        event.channel.sendMessage("Please confirm or cancel your image being posted to the verification channel.").queue()
     }
 }
