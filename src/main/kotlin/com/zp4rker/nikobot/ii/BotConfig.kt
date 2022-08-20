@@ -4,9 +4,11 @@ import kotlinx.serialization.Serializable
 
 lateinit var TOKEN: String
 lateinit var VERIFICATION_CHANNEL: String
+lateinit var VERIFICATION_ROLE: String
 
 @Serializable
 data class BotConfig (
     val token: String,
-    val verificationChannel: String
+    val verificationChannel: String,
+    val verificationRole: String
 )

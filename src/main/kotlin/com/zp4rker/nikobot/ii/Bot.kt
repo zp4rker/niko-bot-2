@@ -30,6 +30,7 @@ private fun config(): Boolean {
             val config = Yaml.default.decodeFromString(BotConfig.serializer(), file.readText())
             TOKEN = config.token
             VERIFICATION_CHANNEL = config.verificationChannel
+            VERIFICATION_ROLE = config.verificationRole
             LOGGER.info("Successfully read config.yml!")
             true
         } catch (e: SerializationException) {
@@ -42,6 +43,7 @@ private fun config(): Boolean {
         file.writeText(
             """token: inserttokenhere
               |verificationChannel: insertidhere
+              |verificationRole: insertidhere
             """.trimMargin()
         )
         LOGGER.info("Example config.yml created, please fill it in then start the bot again")
