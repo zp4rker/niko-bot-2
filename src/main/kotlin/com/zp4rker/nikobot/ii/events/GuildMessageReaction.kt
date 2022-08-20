@@ -18,7 +18,10 @@ object GuildMessageReaction : ListenerAdapter() {
                 removeReaction(Emoji.fromFormatted("❌"), event.jda.selfUser).queue()
             }
 
-            val candidate = imageMsg.mentions.members.first()
+            val candidate = event.guild.getMember(imageMsg.mentions.users.first()) ?: run {
+                event.channel.sendMessage("Unable to verify which user this is for.").queue()
+                return
+            }
             val role = event.guild.getRoleById(VERIFICATION_ROLE) ?: run {
                 event.channel.sendMessage("Unable to find verification role! Please check the config.").queue()
                 return

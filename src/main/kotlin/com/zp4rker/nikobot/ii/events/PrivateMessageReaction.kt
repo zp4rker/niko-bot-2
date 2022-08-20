@@ -16,7 +16,7 @@ object PrivateMessageReaction : ListenerAdapter() {
             val image = imageMsg.attachments.first()
 
             val msg = event.jda.getTextChannelById(VERIFICATION_CHANNEL)
-                ?.sendMessage(image.proxyUrl)?.mention(event.user)?.complete()
+                ?.sendMessage("${event.user!!.asMention} ${image.proxyUrl}")?.complete()
             msg?.apply {
                 addReaction(Emoji.fromFormatted("✔️")).queue()
                 addReaction(Emoji.fromFormatted("❌")).queue()
