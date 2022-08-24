@@ -20,8 +20,12 @@ object PrivateMessage : ListenerAdapter() {
             LOGGER.warn("User tried private messaging bot but cannot be found in the guild")
             return
         }
+
         // Make sure member doesn't already have role
-        if (member.roles.contains(role)) return
+        if (member.roles.contains(role)) {
+            event.channel.sendMessage("You have already been verified!").queue()
+            return
+        }
 
         // Only check for images sent
         if (event.message.attachments.isEmpty()) return
