@@ -1,5 +1,7 @@
 package com.zp4rker.nikobot.ii.events
 
+import com.zp4rker.nikobot.ii.APPROVE_EMOJI
+import com.zp4rker.nikobot.ii.DENY_EMOJI
 import com.zp4rker.nikobot.ii.LOGGER
 import com.zp4rker.nikobot.ii.VERIFICATION_ROLE
 import net.dv8tion.jda.api.entities.ChannelType
@@ -33,8 +35,8 @@ object PrivateMessage : ListenerAdapter() {
 
         // Add confirm/cancel reactions
         event.message.apply {
-            addReaction(Emoji.fromFormatted("✔️")).queue()
-            addReaction(Emoji.fromFormatted("❌")).queue()
+            addReaction(Emoji.fromFormatted(APPROVE_EMOJI)).queue()
+            addReaction(Emoji.fromFormatted(DENY_EMOJI)).queue()
         }
 
         event.channel.sendMessage("Please confirm or cancel your image being posted to the verification channel.").queue()
