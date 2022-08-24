@@ -13,6 +13,9 @@ object PrivateMessageReaction : ListenerAdapter() {
         if (!event.isFromType(ChannelType.PRIVATE)) return
         if (event.user == event.jda.selfUser) return
 
+        // Prevent them reacting multiple times
+        if (!event.reaction.retrieveUsers().contains(event.jda.selfUser)) return
+
         val imageMsg = event.channel.retrieveMessageById(event.messageId).complete()
 
         if (event.emoji == Emoji.fromFormatted(APPROVE_EMOJI)) { // Confirm

@@ -12,6 +12,10 @@ object GuildMessageReaction : ListenerAdapter() {
         if (!event.isFromGuild) return
         if (event.user == event.jda.selfUser) return
 
+        // Prevent them reacting multiple times + multiple users reacting
+        val reactions = event.reaction.retrieveUsers().complete()
+        if (!reactions.contains(event.jda.selfUser) || reactions.size > 2) return
+
         val imageMsg = event.channel.retrieveMessageById(event.messageId).complete()
 
         if (event.emoji == Emoji.fromFormatted(APPROVE_EMOJI)) { // Confirm
