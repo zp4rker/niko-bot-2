@@ -13,7 +13,7 @@ object GuildMessageReaction : ListenerAdapter() {
         val imageMsg = event.channel.retrieveMessageById(event.messageId).complete()
 
         if (event.emoji == Emoji.fromFormatted("✔️")) { // Confirm
-            val candidate = imageMsg.mentions.members.first() ?: run {
+            val candidate = event.guild.getMember(imageMsg.mentions.users.first()) ?: run {
                 event.channel.sendMessage("Unable to verify which user this is for.").queue()
                 return
             }

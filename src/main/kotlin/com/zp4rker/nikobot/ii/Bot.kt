@@ -7,6 +7,7 @@ import com.zp4rker.nikobot.ii.events.PrivateMessage
 import com.zp4rker.nikobot.ii.events.PrivateMessageReaction
 import kotlinx.serialization.SerializationException
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.requests.GatewayIntent
 import java.io.File
 
 val LOGGER = Log4KtLoggerFactory().getLogger("bot")
@@ -16,7 +17,7 @@ fun main() {
     if (!config()) return
 
     LOGGER.info("Initialising bot...")
-    val jda = JDABuilder.createDefault(TOKEN).build()
+    val jda = JDABuilder.createDefault(TOKEN).enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES).build()
 
     jda.addEventListener(PrivateMessage, PrivateMessageReaction, GuildMessageReaction)
     jda.awaitReady()
