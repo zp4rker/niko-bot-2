@@ -16,7 +16,7 @@ object PrivateMessage : ListenerAdapter() {
             LOGGER.error("Unable to find verification role! Please check the config")
             return
         }
-        val member = role.guild.getMember(event.author) ?: run {
+        val member = role.guild.getMemberById(event.author.id) ?: run {
             LOGGER.warn("User tried private messaging bot but cannot be found in the guild")
             return
         }

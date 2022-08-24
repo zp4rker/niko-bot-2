@@ -10,15 +10,10 @@ object GuildMessageReaction : ListenerAdapter() {
         if (!event.isFromGuild) return
         if (event.user == event.jda.selfUser) return
 
+        val imageMsg = event.channel.retrieveMessageById(event.messageId).complete()
+
         if (event.emoji == Emoji.fromFormatted("✔️")) { // Confirm
-            val imageMsg = event.channel.retrieveMessageById(event.messageId).complete()
-
-            imageMsg.apply {
-                removeReaction(Emoji.fromFormatted("✔️"), event.jda.selfUser).queue()
-                removeReaction(Emoji.fromFormatted("❌"), event.jda.selfUser).queue()
-            }
-
-            val candidate = event.guild.getMember(imageMsg.mentions.users.first()) ?: run {
+            val candidate = imageMsg.mentions.members.first() ?: run {
                 event.channel.sendMessage("Unable to verify which user this is for.").queue()
                 return
             }
@@ -31,6 +26,11 @@ object GuildMessageReaction : ListenerAdapter() {
             event.channel.sendMessage("The user has been approved.").queue()
         } else if (event.emoji == Emoji.fromFormatted("❌")) { // Cancel
             event.channel.sendMessage("The user has been denied.").queue()
+        }
+
+        imageMsg.apply {
+            removeReaction(Emoji.fromFormatted("✔️"), event.jda.selfUser).queue()
+            removeReaction(Emoji.fromFormatted("❌"), event.jda.selfUser).queue()
         }
     }
 }
